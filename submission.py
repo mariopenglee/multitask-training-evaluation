@@ -141,10 +141,8 @@ class MultiTaskNet(nn.Module):
             nn.Embedding of shape (num_items, embedding_dim)
         """
         U = Q = None
-        ### START CODE HERE ###
         U = ScaledEmbedding(num_users, embedding_dim)
         Q = ScaledEmbedding(num_items, embedding_dim)
-        ### END CODE HERE ###
         return U, Q
     
     def init_separate_user_and_item_embeddings(self, num_users, num_items, embedding_dim):
@@ -177,10 +175,8 @@ class MultiTaskNet(nn.Module):
             nn.Embedding of shape (num_items, embedding_dim)
         """
         U_reg = Q_reg = U_fact = Q_fact = None
-        ### START CODE HERE ###
         U_reg, Q_reg = ScaledEmbedding(num_users, embedding_dim), ScaledEmbedding(num_items, embedding_dim)
         U_fact, Q_fact = ScaledEmbedding(num_users, embedding_dim), ScaledEmbedding(num_items, embedding_dim)
-        ### END CODE HERE ###
         return U_reg, Q_reg, U_fact, Q_fact
     
     def init_user_and_item_bias(self, num_users, num_items):
@@ -204,10 +200,8 @@ class MultiTaskNet(nn.Module):
             nn.Embedding of shape (num_items, 1)
         """
         A = B = None
-        ### START CODE HERE ###
         A = ZeroEmbedding(num_users, 1)
         B = ZeroEmbedding(num_items, 1)
-        ### END CODE HERE ###
         return A, B
     
     def init_mlp_layers(self, layer_sizes):
@@ -227,7 +221,6 @@ class MultiTaskNet(nn.Module):
             MLP network containing Linear and ReLU layers
         """
         mlp_layers = None
-        ### START CODE HERE ###
         mlp_layers = nn.ModuleList()
         if(len(layer_sizes) == 1):
             mlp_layers.append(nn.Linear(layer_sizes[0], 1))
@@ -245,7 +238,6 @@ class MultiTaskNet(nn.Module):
             mlp_layers.append(nn.Linear(mid[-1], last))
             mlp_layers.append(nn.ReLU())
             mlp_layers.append(nn.Linear(last, 1))
-        ### END CODE HERE ###
         return mlp_layers
 
     def forward_with_embedding_sharing(self, user_ids, item_ids):
@@ -253,7 +245,6 @@ class MultiTaskNet(nn.Module):
         Please see forward() docstrings for reference
         """
         predictions = score = None
-        ### START CODE HERE ###
         # ensure predictions and score are of shape (batch_size, )
         predictions = self.U(user_ids) * self.Q(item_ids)
         predictions = predictions.sum(dim=1) + self.A(user_ids).squeeze() + self.B(item_ids).squeeze()
@@ -261,7 +252,6 @@ class MultiTaskNet(nn.Module):
         model = nn.Sequential(*self.mlp_layers)
         score = model(latent_vector_concat)
         score = score.squeeze()
-        ### END CODE HERE ###
         return predictions, score
     
     def forward_without_embedding_sharing(self, user_ids, item_ids):
@@ -269,11 +259,9 @@ class MultiTaskNet(nn.Module):
         Please see forward() docstrings for reference
         """
         predictions = score = None
-        ### START CODE HERE ###
         predictions = (self.U_fact(user_ids) * self.Q_fact(item_ids)).sum(dim=1) + self.A(user_ids).squeeze() + self.B(item_ids).squeeze()
         latent_vector_concat = torch.cat((self.U_reg(user_ids), self.Q_reg(item_ids), self.U_reg(user_ids) * self.Q_reg(item_ids)), dim=1)
         model = nn.Sequential(*self.mlp_layers)
         score = model(latent_vector_concat)
         score = score.squeeze()
-        ### END CODE HERE ###
         return predictions, score
