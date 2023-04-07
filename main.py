@@ -4,7 +4,7 @@ import numpy as np
 
 from dataset import get_movielens_dataset
 from evaluation import mrr_score, mse_score
-from submission import MultiTaskNet
+from model import MultiTaskNet
 from multitask import MultitaskModel
 from utils import fix_random_seeds
 from torch.utils.tensorboard import SummaryWriter

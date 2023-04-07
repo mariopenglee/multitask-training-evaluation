@@ -8,7 +8,7 @@ import utils
 import numpy as np
 import torch.optim as optim
 
-from submission import MultiTaskNet
+from model import MultiTaskNet
 
 
 class MultitaskModel(object):
