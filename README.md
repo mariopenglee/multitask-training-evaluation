@@ -2,8 +2,9 @@
  A multitask training experiment that evaluates parameter sharing on a recommender system using Matrix Factorization and Neural Collaborative Filtering algorithms.
  
  Consider a set of users from a streaming platform such as Netflix or Youtube. At a high level, there are two loops:
-Outer loop: In multitask learning, we frame each user as its own task, with its own dataset. 
-Inner loop: For each user-movie pair, there are two tasks, predicting whether the user would watch the movie (factorization) and predicting the score that the user would rate the movie with (regression). 
+- Outer loop: In multitask learning, we frame each user as its own task, with its own dataset. 
+- Inner loop: For each user-movie pair, there are two tasks, predicting whether the user would watch the movie (factorization) and predicting the score that the user would rate the movie with (regression). 
+
 The idea is to evaluate how parameter sharing and loss weighting affects performance.
 
 ## Running
